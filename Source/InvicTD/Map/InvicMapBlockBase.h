@@ -17,6 +17,8 @@ public:
 	// Sets default values for this actor's properties
 	AInvicMapBlockBase();
 
+	class UMeshComponent* Mesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -29,7 +31,8 @@ public:
 	EMB_TileType GetTileType() const;
 
 private:
-	EMB_TileType Type;
+	UPROPERTY(EditAnywhere)
+		EMB_TileType Type = EMB_TileType::None;
 
 
 

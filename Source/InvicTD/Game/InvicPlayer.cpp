@@ -6,6 +6,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/MeshComponent.h"
 
 #include "InvicTD\GAS\GAS_AbilitySystemComponent.h"
 #include "InvicTD\GAS\GAS_AttributeSet.h"
@@ -17,6 +18,9 @@ AInvicPlayer::AInvicPlayer()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Mesh = CreateDefaultSubobject<UMeshComponent>(TEXT("Empty Mesh"));
+	RootComponent = Mesh;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);

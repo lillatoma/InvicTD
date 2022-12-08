@@ -2,6 +2,7 @@
 
 
 #include "InvicMapBlockBase.h"
+#include "Components/MeshComponent.h"
 
 // Sets default values
 AInvicMapBlockBase::AInvicMapBlockBase()
@@ -9,6 +10,7 @@ AInvicMapBlockBase::AInvicMapBlockBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Mesh = CreateDefaultSubobject<UMeshComponent>(TEXT("Mesh"));
 }
 
 // Called when the game starts or when spawned

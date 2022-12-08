@@ -50,4 +50,18 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TArray<FIntPoint> Path;
+
+public:
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AActor> PathObject;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AActor> HighObject;
+
+	UPROPERTY(EditAnywhere)
+		TArray<TSubclassOf<class AActor>> PathScenery;
+
+	UPROPERTY(EditAnywhere)
+		TArray<TSubclassOf<class AActor>> HighScenery;
 };

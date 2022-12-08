@@ -25,7 +25,14 @@ UCLASS()
 class INVICTD_API AInvicMapBuilder : public AActor
 {
 	GENERATED_BODY()
-	
+
+	UPROPERTY(EditAnywhere)
+		class UMapDataAsset* MapAsset;
+
+	UPROPERTY(EditAnywhere)
+		float TileDistance = 100.0f;
+
+
 public:	
 	// Sets default values for this actor's properties
 	AInvicMapBuilder();
@@ -33,6 +40,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void BuildMapFromMapAsset();
+	virtual void BuildMapFromString(FIntPoint Size, char* String);
 
 public:	
 	// Called every frame
