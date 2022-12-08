@@ -13,6 +13,8 @@
 #include "InvicTD\GAS\GAS_GameplayAbility.h"
 #include <GameplayEffectTypes.h>
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AInvicPlayer::AInvicPlayer()
 {
@@ -105,6 +107,8 @@ void AInvicPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	APlayerController* PlayerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerControllerRef->SetShowMouseCursor(true);
 }
 
 // Called every frame
