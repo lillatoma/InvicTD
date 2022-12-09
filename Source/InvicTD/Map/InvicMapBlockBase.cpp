@@ -10,7 +10,7 @@ AInvicMapBlockBase::AInvicMapBlockBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Mesh = CreateDefaultSubobject<UMeshComponent>(TEXT("Mesh"));
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 }
 
 // Called when the game starts or when spawned
@@ -35,5 +35,15 @@ void AInvicMapBlockBase::SetTileType(EMB_TileType type)
 EMB_TileType AInvicMapBlockBase::GetTileType() const
 {
 	return Type;
+}
+
+bool AInvicMapBlockBase::CanTowerBeBuilt() const
+{
+	return !hasTower && Type == EMB_TileType::High;
+}
+
+void AInvicMapBlockBase::MarkBuildTower()
+{
+	hasTower = true;
 }
 

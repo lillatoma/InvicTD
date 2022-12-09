@@ -13,11 +13,14 @@ class INVICTD_API AInvicMapBlockBase : public AActor
 {
 	GENERATED_BODY()
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* Mesh;
+
 public:	
 	// Sets default values for this actor's properties
 	AInvicMapBlockBase();
 
-	class UMeshComponent* Mesh;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,10 +33,14 @@ public:
 	void SetTileType(EMB_TileType type);
 	EMB_TileType GetTileType() const;
 
+	bool CanTowerBeBuilt() const;
+	void MarkBuildTower();
+
 private:
 	UPROPERTY(EditAnywhere)
 		EMB_TileType Type = EMB_TileType::None;
 
+	bool hasTower = false;
 
 
 };

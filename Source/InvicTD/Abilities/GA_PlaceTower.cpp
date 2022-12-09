@@ -2,6 +2,8 @@
 
 
 #include "GA_PlaceTower.h"
+#include "InvicTD\Map\InvicMapBlockBase.h"
+#include "InvicTD\Map\InvicMapBuilder.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -21,7 +23,23 @@ void UGA_PlaceTower::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 	FHitResult HitResult;
 	if (PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, HitResult.HitObjectHandle.FetchActor()->GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, HitResult.HitObjectHandle.FetchActor()->GetName()); 
+		AActor* Floor = HitResult.HitObjectHandle.FetchActor();
+		if (Floor)
+		{
+			AInvicMapBlockBase* Block = Cast<AInvicMapBlockBase>(Floor);
+			if (Block && Block->CanTowerBeBuilt())
+			{
+				FVector Location = Block->GetActorLocation();
+				Location.Z = HitResult.ImpactPoint.Z;
+
+				AActor* Object = GetWorld()->SpawnActor<AActor>(TowerActor, Location, FRotator());
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Location (%.2f|%.2f|%.2f"), Location.X, Location.Y, Location.Z));
+
+				if(Object)
+					Block->MarkBuildTower();
+			}
+		}
 	}
 
 	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);

@@ -18,8 +18,14 @@ AInvicTower::AInvicTower()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CylMesh = CreateDefaultSubobject<UMeshComponent>(TEXT("Cylinder Mesh"));
+	CylMesh = CreateDefaultSubobject<UStaticMeshComponent>("Cylinder Mesh");
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>("Turret Mesh");
+	
+	if (CylMesh)
+		RootComponent = CylMesh;
 
+	if(TurretMesh)
+		TurretMesh->SetupAttachment(CylMesh);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UGAS_AbilitySystemComponent>("Ability System Component");
 	AbilitySystemComponent->SetIsReplicated(true);
@@ -37,7 +43,7 @@ void AInvicTower::BeginPlay()
 
 	InitializeAttributes();
 	GiveAbilities();
-	BeginPlay();
+	//BeginPlay();
 }
 
 // Called every frame

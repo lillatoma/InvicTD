@@ -14,15 +14,17 @@ class INVICTD_API AInvicTower : public AActor, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
-		class UMeshComponent* CylMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* CylMesh;
 
-		int something = 100;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* TurretMesh;
+
 
 #pragma region GAS
 private:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAS", meta = (AllowPrivateAccess = "true"))
 		class UGAS_AbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY()
