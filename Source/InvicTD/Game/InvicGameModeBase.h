@@ -20,5 +20,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Map Builder")
 		TSubclassOf<class AInvicMapBuilder> MapGenerator;
 
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawner")
+		TSubclassOf<class AInvicEnemySpawner> EnemySpawner;
 
+	UPROPERTY(EditAnywhere, Category = "Player")
+		TSubclassOf<class AInvicPlayer> PlayerToSpawn;
+
+	UPROPERTY(EditAnywhere, Category = "Player")
+		FVector PlayerSpawnPosition = FVector(-250.0f,0.0f,1000.0f);
+
+	virtual void PassPathToSpawner(class AInvicEnemySpawner* Spawner, class AInvicMapBuilder* Map);
 };

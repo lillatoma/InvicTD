@@ -48,6 +48,14 @@ public:
 
 #pragma endregion
 
+	UPROPERTY(EditAnywhere)
+		float Range;
+	UPROPERTY(EditAnywhere)
+		float Damage;
+
+	class AInvicEnemy* Target;
+
+	FVector GetCannonLocation();
 
 public:	
 	// Sets default values for this actor's properties
@@ -57,8 +65,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void FindEnemy();
+
+	virtual void TryAttackEnemy();
+
+	class AInvicEnemySpawner* GetEnemyList();
+	class AInvicEnemySpawner* EnemyList;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+private:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "Prereqs")
+		TSubclassOf<class UGameplayAbility> AttackAbility;
 };

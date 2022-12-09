@@ -32,10 +32,17 @@ class INVICTD_API AInvicMapBuilder : public AActor
 	UPROPERTY(EditAnywhere)
 		float TileDistance = 100.0f;
 
+	UPROPERTY(EditAnywhere)
+		float ConvertZ = 50.0f;
 
 public:	
 	// Sets default values for this actor's properties
 	AInvicMapBuilder();
+
+	virtual class UMapDataAsset* GetAsset() const;
+	virtual float GetTileDistance() const;
+
+	virtual FVector ConvertGridToWorld(FIntPoint point) const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,6 +50,8 @@ protected:
 
 	virtual void BuildMapFromMapAsset();
 	virtual void BuildMapFromString(FIntPoint Size, char* String);
+
+
 
 public:	
 	// Called every frame

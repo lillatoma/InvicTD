@@ -12,6 +12,33 @@ AInvicMapBuilder::AInvicMapBuilder()
 
 }
 
+UMapDataAsset* AInvicMapBuilder::GetAsset() const
+{
+	return MapAsset;
+}
+
+float AInvicMapBuilder::GetTileDistance() const
+{
+	return TileDistance;
+}
+
+FVector AInvicMapBuilder::ConvertGridToWorld(FIntPoint point) const
+{
+	FIntPoint TopLeft = FIntPoint();
+	FIntPoint Size = FIntPoint();
+	if (MapAsset)
+	{
+		Size = MapAsset->GetSize();
+		TopLeft = FIntPoint(-Size.X / 2, -Size.Y / 2);
+	}
+	int x = point.X, y = point.Y;
+
+	int TX = TopLeft.X + (Size.X - x);
+	int TY = TopLeft.Y + y;
+	FVector Position = FVector(TileDistance * TX - 0.5f * TileDistance, TileDistance * TY + 0.5f * TileDistance, ConvertZ);
+	return Position;
+}
+
 // Called when the game starts or when spawned
 void AInvicMapBuilder::BeginPlay()
 {
