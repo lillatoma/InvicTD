@@ -30,4 +30,13 @@ protected:
 		FVector PlayerSpawnPosition = FVector(-250.0f,0.0f,1000.0f);
 
 	virtual void PassPathToSpawner(class AInvicEnemySpawner* Spawner, class AInvicMapBuilder* Map);
+
+public:
+	void PreloseGame();
+
+	void LoseGame();
+
+	void PrewinGame();
+
+	void WinGame();
 };

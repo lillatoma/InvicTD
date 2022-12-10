@@ -39,6 +39,11 @@ FVector AInvicMapBuilder::ConvertGridToWorld(FIntPoint point) const
 	return Position;
 }
 
+void AInvicMapBuilder::SetMapAsset(UMapDataAsset* Asset)
+{
+	MapAsset = Asset;
+}
+
 // Called when the game starts or when spawned
 void AInvicMapBuilder::BeginPlay()
 {

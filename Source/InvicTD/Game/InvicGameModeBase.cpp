@@ -4,6 +4,7 @@
 #include "InvicGameModeBase.h"
 #include "InvicTD\Map\InvicMapBuilder.h"
 #include "InvicTD\Map\MapDataAsset.h"
+#include "InvicTD\Menu\GI_PlayerInfo.h"
 #include "InvicEnemySpawner.h"
 #include "InvicPlayer.h"
 
@@ -12,12 +13,24 @@
 void AInvicGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	//Try spawning the mapgenerator
-	AActor* MapGenActor = GetWorld()->SpawnActor<AActor>(MapGenerator, FVector(), FRotator());
-	AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(MapGenActor);
-	
 
-	FTransform SpawnTransform(FRotator(),FVector(), FVector(1, 1, 1));
+	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+
+
+	//Try spawning the mapgenerator
+	//AActor* MapGenActor = GetWorld()->SpawnActor<AActor>(MapGenerator, FVector(), FRotator());
+	//AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(MapGenActor);
+	
+	FTransform SpawnTransform(FRotator(), FVector(), FVector(1, 1, 1));
+	AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, MapGenerator, SpawnTransform));
+
+	if (MapGen)
+	{
+		if (Info && Info->CurrentLevel < Info->MapAssets.Num())
+			MapGen->SetMapAsset(Info->MapAssets[Info->CurrentLevel]);
+		UGameplayStatics::FinishSpawningActor(MapGen, SpawnTransform);
+	}
+
 	AInvicEnemySpawner* EnemySpawn = Cast<AInvicEnemySpawner>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, EnemySpawner, SpawnTransform));
 
 	if (EnemySpawn)
@@ -43,4 +56,40 @@ void AInvicGameModeBase::PassPathToSpawner(AInvicEnemySpawner* Spawner, AInvicMa
 		ConvertedPath.Add(Map->ConvertGridToWorld(Path[i]));
 	}
 	Spawner->SetConvertedPath(ConvertedPath);
+}
+
+void AInvicGameModeBase::PreloseGame()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	LoseGame();
+}
+
+void AInvicGameModeBase::LoseGame()
+{
+	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+	if (Info)
+	{
+		UGameplayStatics::OpenLevel(GetWorld(), FName(*Info->MainMenuLevelName));
+	}
+}
+
+void AInvicGameModeBase::PrewinGame()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	WinGame();
+
+}
+
+void AInvicGameModeBase::WinGame()
+{
+	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+	if (Info)
+	{
+		Info->CurrentLevel++;
+		if (Info->CurrentLevel >= Info->MapAssets.Num())
+			Info->CurrentLevel = 0;
+		UGameplayStatics::OpenLevel(GetWorld(), FName(*Info->GameLevelName));
+	}
 }

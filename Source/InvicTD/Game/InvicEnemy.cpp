@@ -3,7 +3,7 @@
 
 #include "InvicEnemy.h"
 #include "InvicEnemySpawner.h"
-
+#include "InvicGameModeBase.h"
 #include "InvicTD\GAS\GAS_AbilitySystemComponent.h"
 #include "InvicTD\GAS\GAS_AttributeSet.h"
 #include "InvicTD\GAS\GAS_GameplayAbility.h"
@@ -60,7 +60,12 @@ void AInvicEnemy::MoveToNextPathPoint(float DeltaTime)
 			}
 			else
 			{
-				//Lost, sorry
+				//Lose
+				AInvicGameModeBase* GameMode = Cast<AInvicGameModeBase>(GetWorld()->GetAuthGameMode());
+				if (GameMode)
+				{
+					GameMode->PreloseGame();
+				}
 			}
 		}
 		else
@@ -81,6 +86,16 @@ void AInvicEnemy::SetMovementSpeed(float speed)
 void AInvicEnemy::GetKilled()
 {
 	Spawner->RemoveEnemyFromList(this);
+
+	if (Spawner->CountEnemiesLeft() == 0)
+	{
+		AInvicGameModeBase* GameMode = Cast<AInvicGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->PrewinGame();
+		}
+	}
+
 
 	Destroy();
 }

@@ -44,6 +44,8 @@ public:
 
 	virtual FVector ConvertGridToWorld(FIntPoint point) const;
 
+	virtual void SetMapAsset(UMapDataAsset* Asset);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
