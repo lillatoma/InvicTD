@@ -25,7 +25,7 @@ void UGA_SpawnProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 			{
 				CannonBall->Target = Tower->Target;
 				CannonBall->SetOwner(ActorInfo->OwnerActor.Get());
-				UGameplayStatics::FinishSpawningActor(CannonBall, SpawnTransform);
+				UGameplayStatics::FinishSpawningActor(CannonBall, SpawnTransform); 
 			}
 
 		}

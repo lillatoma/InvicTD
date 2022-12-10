@@ -16,6 +16,7 @@ void AInvicGameModeBase::BeginPlay()
 	AActor* MapGenActor = GetWorld()->SpawnActor<AActor>(MapGenerator, FVector(), FRotator());
 	AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(MapGenActor);
 	
+
 	FTransform SpawnTransform(FRotator(),FVector(), FVector(1, 1, 1));
 	AInvicEnemySpawner* EnemySpawn = Cast<AInvicEnemySpawner>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, EnemySpawner, SpawnTransform));
 
@@ -24,7 +25,7 @@ void AInvicGameModeBase::BeginPlay()
 		PassPathToSpawner(EnemySpawn, MapGen);
 		EnemySpawn->SetEnemiesLeftToSpawn(MapGen->GetAsset()->GetEnemyCount());
 		EnemySpawn->SetEnemySpawnTime(MapGen->GetAsset()->GetSpawnGap());
-		UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform);
+		UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform); 
 	}
 
 	AActor* PlayerActor = GetWorld()->SpawnActor<AActor>(PlayerToSpawn, PlayerSpawnPosition, FRotator());

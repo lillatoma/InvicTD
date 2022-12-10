@@ -56,7 +56,7 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 
 				if (Enemy->GetHealth() <= 0)
 				{
-					Enemy->GetKilled();
+					Enemy->GetKilled(); 
 				}
 			}
 

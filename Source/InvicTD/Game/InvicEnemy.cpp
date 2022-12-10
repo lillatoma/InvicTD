@@ -97,7 +97,7 @@ void AInvicEnemy::BeginPlay()
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
-	InitializeAttributes();
+	InitializeAttributes(); 
 	GiveAbilities();
 }
 

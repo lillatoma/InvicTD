@@ -30,7 +30,7 @@ void AInvicEnemySpawner::SpawnEnemy()
 	}
 
 	if (RealEnemy)
-		EnemiesOnMap.Add(RealEnemy);
+		EnemiesOnMap.Add(RealEnemy); 
 }
 
 void AInvicEnemySpawner::SetEnemiesLeftToSpawn(int count)
