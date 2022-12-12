@@ -4,7 +4,7 @@
 #include "MainMenuGameMode.h"
 #include "GI_PlayerInfo.h"
 #include "UW_MainMenu.h"
-
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void AMainMenuGameMode::BeginPlay()
@@ -29,6 +29,17 @@ void AMainMenuGameMode::BeginPlay()
 
 	GetWorldTimerManager().SetTimer(
 		UnusedHandle, this, &AMainMenuGameMode::EnableMouse, 0.001f, false);
+
+	//Audio->
+	if (PlayerInfo && !PlayerInfo->Audio)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, SoundBase->GetName());
+		PlayerInfo->StartPlayingSound(SoundBase);
+		//PlayerInfo->Audio = UGameplayStatics::CreateSound2D(PlayerInfo, SoundBase, 0.25f, 1.0f, 0.0f, nullptr, true, false);
+		//PlayerInfo->Audio->Play(); 
+		//PlayerInfo->Audio = UGameplayStatics::SpawnSound2D(GetWorld(), SoundBase, 1.0f, 1.0f, 0.0f, nullptr, true, false);
+	}
+
 }
 
 void AMainMenuGameMode::EnableMouse()

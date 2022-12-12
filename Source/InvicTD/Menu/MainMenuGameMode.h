@@ -27,6 +27,8 @@ class INVICTD_API AMainMenuGameMode : public AGameModeBase
 
 	void EnableMouse();
 
+
+
 public:
 
 	void LaunchGame(FString Name, int MapIndex);
@@ -40,5 +42,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		FString MainMenuName;
 
-
+	UPROPERTY(EditAnywhere)
+		USoundBase* SoundBase;
 };

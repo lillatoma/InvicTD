@@ -52,7 +52,10 @@ public:
 		float Range;
 	UPROPERTY(EditAnywhere)
 		float Damage;
-
+	UPROPERTY(EditAnywhere)
+		float TowerHeight = 100.0f;
+	UPROPERTY(EditAnywhere)
+		float CannonRotationSpeed = 540.0f;
 	class AInvicEnemy* Target;
 
 	FVector GetCannonLocation();
@@ -69,8 +72,16 @@ protected:
 
 	virtual void TryAttackEnemy();
 
+	virtual void RotateCannonTowardsEnemy(float DeltaTime);
+
 	class AInvicEnemySpawner* GetEnemyList();
 	class AInvicEnemySpawner* EnemyList;
+
+	UPROPERTY(EditAnywhere, Category = "Sounds")
+		class USoundBase* PlaceSound;
+
+	virtual void MakeTowerPlaceSound();
+
 
 public:	
 	// Called every frame

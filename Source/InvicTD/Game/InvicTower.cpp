@@ -19,7 +19,7 @@
 FVector AInvicTower::GetCannonLocation()
 {
 	FVector Location = GetActorLocation();
-	Location.Z += 80.f;
+	Location.Z += TowerHeight;
 	return Location;
 }
 
@@ -54,6 +54,7 @@ void AInvicTower::BeginPlay()
 
 	InitializeAttributes();
 	GiveAbilities();
+	MakeTowerPlaceSound();
 	//BeginPlay();
 }
 
@@ -83,7 +84,6 @@ void AInvicTower::FindEnemy()
 
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Distance: %.2f"), ClosestDistance));
 	Target = (ClosestDistance <= Range) ? (AllEnemies[ClosestIndex]) : nullptr;
 }
 
@@ -93,8 +93,46 @@ void AInvicTower::TryAttackEnemy()
 
 	if (Target)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("There is a target")));
 		GetAbilitySystemComponent()->TryActivateAbilityByClass(AttackAbility);
+	}
+}
+
+void AInvicTower::RotateCannonTowardsEnemy(float DeltaTime)
+{
+	if (Target)
+	{
+		FVector Dist = Target->GetActorLocation() - GetActorLocation();
+		FRotator DesiredRotation = Dist.Rotation();
+		DesiredRotation.Yaw -= 90.f;
+		float MaxRotation = DeltaTime * CannonRotationSpeed;
+
+		FRotator CurrentRotation = TurretMesh->GetComponentRotation();
+		
+		float YawDiff = DesiredRotation.Yaw - CurrentRotation.Yaw;
+		while (YawDiff > 180.f)
+			YawDiff -= 360.f;
+		while (YawDiff < -180.f)
+			YawDiff += 360.f;
+
+		FRotator EndRotation = CurrentRotation;
+
+		if (YawDiff < 0.f)
+		{
+			if (YawDiff < -MaxRotation)
+				EndRotation.Yaw += -MaxRotation;
+			else
+				EndRotation.Yaw += YawDiff;
+		}
+		else if (YawDiff > 0.f)
+		{
+			if (YawDiff > MaxRotation)
+				EndRotation.Yaw += MaxRotation;
+			else
+				EndRotation.Yaw += YawDiff;
+		}
+
+
+		TurretMesh->SetWorldRotation(EndRotation);
 	}
 }
 
@@ -117,12 +155,18 @@ AInvicEnemySpawner* AInvicTower::GetEnemyList()
 
 }
 
+void AInvicTower::MakeTowerPlaceSound()
+{
+	if (PlaceSound)
+		UGameplayStatics::SpawnSound2D(GetWorld(), PlaceSound, 0.25f);
+}
+
 // Called every frame
 void AInvicTower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	TryAttackEnemy();
-	
+	RotateCannonTowardsEnemy(DeltaTime); 
 }
 
 UAbilitySystemComponent* AInvicTower::GetAbilitySystemComponent() const

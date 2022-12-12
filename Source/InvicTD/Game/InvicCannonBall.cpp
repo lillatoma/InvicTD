@@ -51,8 +51,11 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 			{
 				auto Context = Tower->GetAbilitySystemComponent()->MakeEffectContext();
 				Context.AddSourceObject(Tower);
+				
 				Tower->GetAbilitySystemComponent()->BP_ApplyGameplayEffectToTarget(
 					DamageEffect, Enemy->GetAbilitySystemComponent(), 1, Context);
+				Enemy->GetDamaged();
+
 
 				if (Enemy->GetHealth() <= 0)
 				{

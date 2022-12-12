@@ -14,8 +14,33 @@ class INVICTD_API AInvicGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, Category = "Widgets")
+		TSubclassOf<class UUserWidget> TextWidgetClass;
+
+	UPROPERTY(EditAnywhere)
+		class UUW_Game* TextWidget;
+
+	UPROPERTY(EditAnywhere, Category = "Widgets")
+		TSubclassOf<class UUserWidget> EndWidgetClass;
+
+	UPROPERTY(EditAnywhere)
+		class UUW_GameEnd* EndWidget;
+
+	UPROPERTY(VisibleAnywhere)
+		class UGI_PlayerInfo* Info;
+
+	UPROPERTY(VisibleAnywhere)
+		class AInvicEnemySpawner* EnemySpawnerOnMap;
+
+	bool bCurrentMatchEnded = false;
+	bool bCurrentMatchWon = false;
+
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void SpawnEndWidget();
+	virtual void SpawnTextWidget();
+
 
 	UPROPERTY(EditAnywhere, Category = "Map Builder")
 		TSubclassOf<class AInvicMapBuilder> MapGenerator;
@@ -31,7 +56,15 @@ protected:
 
 	virtual void PassPathToSpawner(class AInvicEnemySpawner* Spawner, class AInvicMapBuilder* Map);
 
+
+	int EnemiesKilled = 0;
+
 public:
+
+	void OnEnemyKilled();
+
+	void UpdateWidgetText();
+
 	void PreloseGame();
 
 	void LoseGame();
@@ -39,4 +72,6 @@ public:
 	void PrewinGame();
 
 	void WinGame();
+
+	void ActOnGameEnd();
 };

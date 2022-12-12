@@ -5,8 +5,11 @@
 #include "InvicTD\Map\InvicMapBuilder.h"
 #include "InvicTD\Map\MapDataAsset.h"
 #include "InvicTD\Menu\GI_PlayerInfo.h"
+#include "InvicTD\Menu\UW_Game.h"
+#include "InvicTD\Menu\UW_GameEnd.h"
 #include "InvicEnemySpawner.h"
 #include "InvicPlayer.h"
+
 
 #include "Kismet/GameplayStatics.h"
 
@@ -14,7 +17,7 @@ void AInvicGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+	Info = Cast<UGI_PlayerInfo>(GetGameInstance());
 
 
 	//Try spawning the mapgenerator
@@ -38,12 +41,46 @@ void AInvicGameModeBase::BeginPlay()
 		PassPathToSpawner(EnemySpawn, MapGen);
 		EnemySpawn->SetEnemiesLeftToSpawn(MapGen->GetAsset()->GetEnemyCount());
 		EnemySpawn->SetEnemySpawnTime(MapGen->GetAsset()->GetSpawnGap());
-		UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform); 
+		EnemySpawnerOnMap = Cast< AInvicEnemySpawner>(UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform));
 	}
 
 	AActor* PlayerActor = GetWorld()->SpawnActor<AActor>(PlayerToSpawn, PlayerSpawnPosition, FRotator());
 	AInvicPlayer* Player = Cast<AInvicPlayer>(PlayerActor);
+
+	SpawnTextWidget();
+
+
 	
+}
+
+void AInvicGameModeBase::SpawnEndWidget()
+{
+	if (EndWidgetClass)
+	{
+		EndWidget = Cast<UUW_GameEnd>(CreateWidget(GetWorld(), EndWidgetClass));
+
+		if (EndWidget)
+		{
+			EndWidget->AddToViewport();
+			EndWidget->SetWinloseText(bCurrentMatchWon);
+		}
+	}
+}
+
+void AInvicGameModeBase::SpawnTextWidget()
+{
+	if (TextWidgetClass)
+	{
+		TextWidget = Cast<UUW_Game>(CreateWidget(GetWorld(), TextWidgetClass));
+
+		if (TextWidget && Info)
+		{
+			TextWidget->AddToViewport();
+			TextWidget->SetThePlayerName(Info->PlayerName);
+			TextWidget->SetTextFormat("Name: {0}\nLevel: {1}\nEnemies Killed: {2}\nEnemies Left: {3}");
+			UpdateWidgetText();
+		}
+	}
 }
 
 void AInvicGameModeBase::PassPathToSpawner(AInvicEnemySpawner* Spawner, AInvicMapBuilder* Map)
@@ -58,16 +95,31 @@ void AInvicGameModeBase::PassPathToSpawner(AInvicEnemySpawner* Spawner, AInvicMa
 	Spawner->SetConvertedPath(ConvertedPath);
 }
 
+void AInvicGameModeBase::OnEnemyKilled()
+{
+	EnemiesKilled++;
+
+	UpdateWidgetText();
+}
+
+void AInvicGameModeBase::UpdateWidgetText()
+{
+	if (TextWidget && Info && EnemySpawnerOnMap)
+	{
+		TextWidget->SetTheText(Info->CurrentLevel + 1, EnemiesKilled, EnemySpawnerOnMap->CountEnemiesLeft());
+	}
+}
+
 void AInvicGameModeBase::PreloseGame()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
-
-	LoseGame();
+	bCurrentMatchEnded = true;
+	bCurrentMatchWon = false;
+	SpawnEndWidget();
 }
 
 void AInvicGameModeBase::LoseGame()
 {
-	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
 	if (Info)
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*Info->MainMenuLevelName));
@@ -78,18 +130,29 @@ void AInvicGameModeBase::PrewinGame()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
-	WinGame();
+	bCurrentMatchEnded = true;
+	bCurrentMatchWon = true;
+	SpawnEndWidget();
 
 }
 
 void AInvicGameModeBase::WinGame()
 {
-	UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
 	if (Info)
 	{
 		Info->CurrentLevel++;
 		if (Info->CurrentLevel >= Info->MapAssets.Num())
 			Info->CurrentLevel = 0;
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*Info->GameLevelName));
+	}
+}
+
+void AInvicGameModeBase::ActOnGameEnd()
+{
+	if (bCurrentMatchEnded)
+	{
+		if (bCurrentMatchWon)
+			WinGame();
+		else LoseGame();
 	}
 }

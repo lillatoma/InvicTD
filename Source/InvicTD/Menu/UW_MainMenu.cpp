@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+
 FString UUW_MainMenu::CheckForNumericTextAndTrim(FString InputText, int MaxLength)
 {
 	

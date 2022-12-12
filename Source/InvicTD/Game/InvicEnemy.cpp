@@ -9,6 +9,8 @@
 #include "InvicTD\GAS\GAS_GameplayAbility.h"
 #include <GameplayEffectTypes.h>
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AInvicEnemy::AInvicEnemy()
 {
@@ -83,19 +85,28 @@ void AInvicEnemy::SetMovementSpeed(float speed)
 	MovementSpeed = speed;
 }
 
+void AInvicEnemy::GetDamaged()
+{
+	if(HitSound)
+		UGameplayStatics::SpawnSound2D(GetWorld(), HitSound,0.25f);
+}
+
 void AInvicEnemy::GetKilled()
 {
+	if (DeathSound)
+		UGameplayStatics::SpawnSound2D(GetWorld(), DeathSound,0.25f);
 	Spawner->RemoveEnemyFromList(this);
-
-	if (Spawner->CountEnemiesLeft() == 0)
+	AInvicGameModeBase* GameMode = Cast<AInvicGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
 	{
-		AInvicGameModeBase* GameMode = Cast<AInvicGameModeBase>(GetWorld()->GetAuthGameMode());
-		if (GameMode)
+		GameMode->OnEnemyKilled();
+		if (Spawner->CountEnemiesLeft() == 0)
 		{
-			GameMode->PrewinGame();
+			{
+				GameMode->PrewinGame();
+			}
 		}
 	}
-
 
 	Destroy();
 }

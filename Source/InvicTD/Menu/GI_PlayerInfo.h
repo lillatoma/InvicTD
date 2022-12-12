@@ -13,12 +13,28 @@ UCLASS()
 class INVICTD_API UGI_PlayerInfo : public UGameInstance
 {
 	GENERATED_BODY()
-	
-public:
-	int CurrentLevel;
-	FString PlayerName;
-	TArray<class UMapDataAsset*> MapAssets;
 
-	FString MainMenuLevelName;
-	FString GameLevelName;
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int CurrentLevel;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FString PlayerName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TArray<class UMapDataAsset*> MapAssets;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FString MainMenuLevelName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FString GameLevelName;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UAudioComponent* Audio;
+
+
+	UFUNCTION(BlueprintCallable)
+		void StartPlayingSound(class USoundBase* Sound);
+
 };
