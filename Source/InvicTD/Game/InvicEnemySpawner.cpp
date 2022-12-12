@@ -4,6 +4,7 @@
 #include "InvicEnemySpawner.h"
 
 #include "InvicEnemy.h"
+#include "StatsDataAsset.h"
 
 #include "Kismet/GameplayStatics.h"
 // Sets default values
@@ -25,6 +26,8 @@ void AInvicEnemySpawner::SpawnEnemy()
 	{
 		EnemySpawned->Path = ConvertedPath;
 		EnemySpawned->Spawner = this;
+		if(Stats)
+			EnemySpawned->HealthMultiplier = Stats->GetEnemyHealth();
 		RealEnemy = Cast<AInvicEnemy>(UGameplayStatics::FinishSpawningActor(EnemySpawned, SpawnTransform));
 		EnemiesLeftToSpawn--;
 	}

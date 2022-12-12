@@ -41,6 +41,8 @@ protected:
 	virtual void SpawnEndWidget();
 	virtual void SpawnTextWidget();
 
+	UPROPERTY(EditAnywhere)
+		class UStatsDataAsset* StatsAsset;
 
 	UPROPERTY(EditAnywhere, Category = "Map Builder")
 		TSubclassOf<class AInvicMapBuilder> MapGenerator;

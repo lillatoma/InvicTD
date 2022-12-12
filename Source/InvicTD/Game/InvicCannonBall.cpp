@@ -5,6 +5,9 @@
 #include "InvicTower.h"
 #include "InvicEnemy.h"
 
+#include "StatsDataAsset.h"
+#include "InvicTD\Menu\GI_PlayerInfo.h"
+
 #include "InvicTD\GAS\GAS_AbilitySystemComponent.h"
 #include "InvicTD\GAS\GAS_AttributeSet.h"
 #include "InvicTD\GAS\GAS_GameplayAbility.h"
@@ -51,9 +54,10 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 			{
 				auto Context = Tower->GetAbilitySystemComponent()->MakeEffectContext();
 				Context.AddSourceObject(Tower);
-				
+				UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+
 				Tower->GetAbilitySystemComponent()->BP_ApplyGameplayEffectToTarget(
-					DamageEffect, Enemy->GetAbilitySystemComponent(), 1, Context);
+					DamageEffect, Enemy->GetAbilitySystemComponent(), Info->StatsAsset->GetTowerDamage(), Context);
 				Enemy->GetDamaged();
 
 

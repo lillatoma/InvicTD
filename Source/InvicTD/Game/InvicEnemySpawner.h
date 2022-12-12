@@ -31,6 +31,9 @@ public:
 
 	virtual void RemoveEnemyFromList(class AInvicEnemy* Enemy);
 
+	UPROPERTY()
+		class UStatsDataAsset* Stats;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

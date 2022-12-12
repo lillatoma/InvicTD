@@ -19,7 +19,8 @@ void AInvicGameModeBase::BeginPlay()
 
 	Info = Cast<UGI_PlayerInfo>(GetGameInstance());
 
-
+	if (Info)
+		Info->StatsAsset = StatsAsset;
 	//Try spawning the mapgenerator
 	//AActor* MapGenActor = GetWorld()->SpawnActor<AActor>(MapGenerator, FVector(), FRotator());
 	//AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(MapGenActor);
@@ -41,6 +42,7 @@ void AInvicGameModeBase::BeginPlay()
 		PassPathToSpawner(EnemySpawn, MapGen);
 		EnemySpawn->SetEnemiesLeftToSpawn(MapGen->GetAsset()->GetEnemyCount());
 		EnemySpawn->SetEnemySpawnTime(MapGen->GetAsset()->GetSpawnGap());
+		EnemySpawn->Stats = this->StatsAsset;
 		EnemySpawnerOnMap = Cast< AInvicEnemySpawner>(UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform));
 	}
 

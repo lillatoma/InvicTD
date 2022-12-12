@@ -25,6 +25,9 @@ public:
 		TArray<class UMapDataAsset*> MapAssets;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UStatsDataAsset* StatsAsset;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FString MainMenuLevelName;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

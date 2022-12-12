@@ -7,7 +7,8 @@
 
 #include "InvicEnemySpawner.h"
 #include "InvicEnemy.h"
-
+#include "StatsDataAsset.h"
+#include "InvicTD\Menu\GI_PlayerInfo.h"
 
 #include "InvicTD\GAS\GAS_AbilitySystemComponent.h"
 #include "InvicTD\GAS\GAS_AttributeSet.h"
@@ -84,7 +85,7 @@ void AInvicTower::FindEnemy()
 
 		}
 	}
-	Target = (ClosestDistance <= Range) ? (AllEnemies[ClosestIndex]) : nullptr;
+	Target = (ClosestDistance <= Attributes->GetRange()) ? (AllEnemies[ClosestIndex]) : nullptr;
 }
 
 void AInvicTower::TryAttackEnemy()
@@ -180,8 +181,9 @@ void AInvicTower::InitializeAttributes()
 	{
 		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 		EffectContext.AddSourceObject(this);
-
-		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1, EffectContext);
+		UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
+		float Level = Info->StatsAsset->GetTowerRange();
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, Level, EffectContext);
 
 		if (SpecHandle.IsValid())
 		{

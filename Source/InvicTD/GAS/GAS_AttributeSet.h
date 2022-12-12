@@ -41,4 +41,11 @@ public:
 	UFUNCTION()
 		virtual void OnRep_AttackPower(const FGameplayAttributeData& OldAttackPower);
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Range)
+		FGameplayAttributeData Range;
+	ATTRIBUTE_ACCESSORS(UGAS_AttributeSet, Range);
+
+	UFUNCTION()
+		virtual void OnRep_Range(const FGameplayAttributeData& OldRange);
+
 };

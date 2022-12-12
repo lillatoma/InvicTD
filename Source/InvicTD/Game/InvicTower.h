@@ -49,8 +49,6 @@ public:
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
-		float Range;
-	UPROPERTY(EditAnywhere)
 		float Damage;
 	UPROPERTY(EditAnywhere)
 		float TowerHeight = 100.0f;
