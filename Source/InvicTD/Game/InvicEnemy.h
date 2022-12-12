@@ -37,10 +37,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "GAS")
 		TArray<TSubclassOf<class UGAS_GameplayAbility>> DefaultAbilities;
 
-	UPROPERTY(EditAnywhere, Category = "Sounds")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds")
 		class USoundBase* HitSound;
 
-	UPROPERTY(EditAnywhere, Category = "Sounds")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds")
 		class USoundBase* DeathSound;
 
 #pragma endregion

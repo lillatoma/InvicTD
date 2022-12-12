@@ -112,12 +112,12 @@ void AInvicMapBuilder::BuildMapFromMapAsset()
 					break;
 				}
 
-				if(!Object)
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Failed to spawn at %d|%d"),x,y));
+				//if(!Object)
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Failed to spawn at %d|%d"),x,y));
 			}
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Built From Asset yeahhh")));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Built From Asset yeahhh")));
 }
 
 void AInvicMapBuilder::BuildMapFromString(FIntPoint Size, char* String)

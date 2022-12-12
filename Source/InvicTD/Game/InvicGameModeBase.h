@@ -47,6 +47,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Map Builder")
 		TSubclassOf<class AInvicMapBuilder> MapGenerator;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map Builder")
+		TSoftObjectPtr<class AInvicMapBuilder> MapGenSoft;
+
 	UPROPERTY(EditAnywhere, Category = "Enemy Spawner")
 		TSubclassOf<class AInvicEnemySpawner> EnemySpawner;
 

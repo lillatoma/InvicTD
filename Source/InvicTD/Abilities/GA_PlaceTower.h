@@ -19,7 +19,7 @@ class INVICTD_API UGA_PlaceTower : public UGAS_GameplayAbility
 		const FGameplayAbilityActivationInfo ActivationInfo,
 		const FGameplayEventData* TriggerEventData) override;
 
-private:
-	UPROPERTY(EditAnywhere)
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> TowerActor;
 };

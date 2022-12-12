@@ -19,6 +19,8 @@ void AInvicEnemySpawner::SpawnEnemy()
 {
 	if (EnemiesLeftToSpawn <= 0)
 		return;
+
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Spawning an enemy")));
 	FTransform SpawnTransform(FRotator(), ConvertedPath[0], FVector(1, 1, 1));
 	AInvicEnemy* EnemySpawned = Cast<AInvicEnemy>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, EnemyActor, SpawnTransform));
 	AInvicEnemy* RealEnemy = nullptr;

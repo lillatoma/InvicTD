@@ -75,7 +75,7 @@ protected:
 	class AInvicEnemySpawner* GetEnemyList();
 	class AInvicEnemySpawner* EnemyList;
 
-	UPROPERTY(EditAnywhere, Category = "Sounds")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds")
 		class USoundBase* PlaceSound;
 
 	virtual void MakeTowerPlaceSound();

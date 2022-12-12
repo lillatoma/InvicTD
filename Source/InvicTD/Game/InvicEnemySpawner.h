@@ -38,7 +38,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AActor> EnemyActor;
 
 	TArray<FVector> ConvertedPath;

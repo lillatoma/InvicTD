@@ -17,6 +17,6 @@ FString UUW_Game::PutDataIntoFormat(int level, int enemiesKilled, int enemiesLef
 {
 	//const FString Format = TextFormat;
 	FString R = FString::Format(*TextFormat, { *name, level, enemiesKilled, enemiesLeft });
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, R);
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, R);
 	return R;
 }
