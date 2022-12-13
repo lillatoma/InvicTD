@@ -27,6 +27,7 @@ void AMainMenuGameMode::BeginPlay()
 
 	FTimerHandle UnusedHandle;
 
+	//Ensuring that mouse control is given back after player controller was spawned
 	GetWorldTimerManager().SetTimer(
 		UnusedHandle, this, &AMainMenuGameMode::EnableMouse, 0.001f, false);
 
@@ -52,11 +53,12 @@ void AMainMenuGameMode::LaunchGame(FString Name, int MapIndex)
 {
 	if (MapIndex < MapAssets.Num())
 	{
+		//Storing Info in GameInstance to display, and use later
 		PlayerInfo->PlayerName = Name;
 		PlayerInfo->CurrentLevel = MapIndex;
 		PlayerInfo->MapAssets = MapAssets;
 		PlayerInfo->MainMenuLevelName = MainMenuName;//GetWorld()->GetMapName();
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, PlayerInfo->MainMenuLevelName);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, PlayerInfo->MainMenuLevelName);
 
 		PlayerInfo->GameLevelName = GameLevelName;
 

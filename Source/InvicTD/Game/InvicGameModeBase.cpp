@@ -21,33 +21,15 @@ void AInvicGameModeBase::BeginPlay()
 
 	if (Info)
 		Info->StatsAsset = StatsAsset;
-	//Try spawning the mapgenerator
-	//AActor* MapGenActor = GetWorld()->SpawnActor<AActor>(MapGenerator, FVector(), FRotator());
-	//AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(MapGenActor);
 	
-	FTransform SpawnTransform(FRotator(), FVector(), FVector(1, 1, 1));
-	AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, MapGenerator, SpawnTransform));
+	SpawnMapGenerator();
+	SpawnEnemySpawner();
+	SpawnPlayer();
+	
 
-	if (MapGen)
-	{
-		if (Info && Info->CurrentLevel < Info->MapAssets.Num())
-			MapGen->SetMapAsset(Info->MapAssets[Info->CurrentLevel]);
-		UGameplayStatics::FinishSpawningActor(MapGen, SpawnTransform);
-	}
 
-	AInvicEnemySpawner* EnemySpawn = Cast<AInvicEnemySpawner>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, EnemySpawner, SpawnTransform));
 
-	if (EnemySpawn)
-	{
-		PassPathToSpawner(EnemySpawn, MapGen);
-		EnemySpawn->SetEnemiesLeftToSpawn(MapGen->GetAsset()->GetEnemyCount());
-		EnemySpawn->SetEnemySpawnTime(MapGen->GetAsset()->GetSpawnGap());
-		EnemySpawn->Stats = this->StatsAsset;
-		EnemySpawnerOnMap = Cast< AInvicEnemySpawner>(UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform));
-	}
 
-	AActor* PlayerActor = GetWorld()->SpawnActor<AActor>(PlayerToSpawn, PlayerSpawnPosition, FRotator());
-	AInvicPlayer* Player = Cast<AInvicPlayer>(PlayerActor);
 
 	SpawnTextWidget();
 
@@ -83,6 +65,41 @@ void AInvicGameModeBase::SpawnTextWidget()
 			UpdateWidgetText();
 		}
 	}
+}
+
+void AInvicGameModeBase::SpawnMapGenerator()
+{
+	FTransform SpawnTransform(FRotator(), FVector(), FVector(1, 1, 1));
+	AInvicMapBuilder* MapGen = Cast<AInvicMapBuilder>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, MapGenerator, SpawnTransform));
+
+	if (MapGen)
+	{
+		if (Info && Info->CurrentLevel < Info->MapAssets.Num())
+			MapGen->SetMapAsset(Info->MapAssets[Info->CurrentLevel]);
+		MapBuilderOnMap = Cast<AInvicMapBuilder>(UGameplayStatics::FinishSpawningActor(MapGen, SpawnTransform));
+	}
+}
+
+void AInvicGameModeBase::SpawnEnemySpawner()
+{
+	FTransform SpawnTransform(FRotator(), FVector(), FVector(1, 1, 1));
+	AInvicEnemySpawner* EnemySpawn = Cast<AInvicEnemySpawner>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, EnemySpawner, SpawnTransform));
+
+	if (EnemySpawn && MapBuilderOnMap)
+	{
+		PassPathToSpawner(EnemySpawn, MapBuilderOnMap);
+		EnemySpawn->SetEnemiesLeftToSpawn(MapBuilderOnMap->GetAsset()->GetEnemyCount());
+		EnemySpawn->SetEnemySpawnTime(MapBuilderOnMap->GetAsset()->GetSpawnGap());
+		EnemySpawn->Stats = this->StatsAsset;
+		EnemySpawnerOnMap = Cast< AInvicEnemySpawner>(UGameplayStatics::FinishSpawningActor(EnemySpawn, SpawnTransform));
+	}
+}
+
+void AInvicGameModeBase::SpawnPlayer()
+{
+
+	AActor* PlayerActor = GetWorld()->SpawnActor<AActor>(PlayerToSpawn, PlayerSpawnPosition, FRotator());
+	AInvicPlayer* Player = Cast<AInvicPlayer>(PlayerActor);
 }
 
 void AInvicGameModeBase::PassPathToSpawner(AInvicEnemySpawner* Spawner, AInvicMapBuilder* Map)

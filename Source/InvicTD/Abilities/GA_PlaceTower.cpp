@@ -13,17 +13,13 @@ void UGA_PlaceTower::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 
 	APlayerController* PlayerControllerRef = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-	//FVector WorldLocation, WorldDirection;
-	//if (PlayerControllerRef->DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
-	//{
-	//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("WorldLocation (%.2f|%.2f|%.2f"), WorldDirection.X, WorldDirection.Y, WorldDirection.Z));
-
-	//}
-
 	FHitResult HitResult;
+	// Checking what's under the mouse
+	// If it is a blockbase, and it's a High block without a towe
+	// We spawn a tower on top
 	if (PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, HitResult.HitObjectHandle.FetchActor()->GetName()); 
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, HitResult.HitObjectHandle.FetchActor()->GetName()); 
 		AActor* Floor = HitResult.HitObjectHandle.FetchActor();
 		if (Floor)
 		{
@@ -31,10 +27,10 @@ void UGA_PlaceTower::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 			if (Block && Block->CanTowerBeBuilt())
 			{
 				FVector Location = Block->GetActorLocation();
+				//BUG: Might give wrong results if clicked on the side of a High tile
 				Location.Z = HitResult.ImpactPoint.Z;
 
 				AActor* Object = GetWorld()->SpawnActor<AActor>(TowerActor, Location, FRotator());
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Location (%.2f|%.2f|%.2f"), Location.X, Location.Y, Location.Z));
 
 				if(Object)
 					Block->MarkBuildTower();

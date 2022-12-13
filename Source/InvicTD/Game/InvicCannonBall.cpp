@@ -30,6 +30,7 @@ void AInvicCannonBall::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Check if mesh overlaps anything
 	Mesh->OnComponentBeginOverlap.AddDynamic(this, &AInvicCannonBall::OverlapBegin);
 }
 
@@ -52,6 +53,7 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 
 			if (Tower)
 			{
+				//Damage the enemy with how much damage is written inside the stats asset
 				auto Context = Tower->GetAbilitySystemComponent()->MakeEffectContext();
 				Context.AddSourceObject(Tower);
 				UGI_PlayerInfo* Info = Cast<UGI_PlayerInfo>(GetGameInstance());
@@ -59,12 +61,8 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 				Tower->GetAbilitySystemComponent()->BP_ApplyGameplayEffectToTarget(
 					DamageEffect, Enemy->GetAbilitySystemComponent(), Info->StatsAsset->GetTowerDamage(), Context);
 				Enemy->GetDamaged();
-
-
 				if (Enemy->GetHealth() <= 0)
-				{
 					Enemy->GetKilled(); 
-				}
 			}
 
 		}
@@ -74,6 +72,8 @@ void AInvicCannonBall::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AA
 
 void AInvicCannonBall::TryMovingTowardsTarget(float DeltaTime)
 {
+	//If the target still exists, we move towards it
+	//Otherwise this cannonball is not needed
 	if(IsValid(Target))
 	{
 		FVector Location = GetActorLocation();

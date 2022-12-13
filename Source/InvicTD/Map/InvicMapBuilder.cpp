@@ -73,7 +73,7 @@ void AInvicMapBuilder::BuildMapFromMapAsset()
 		{
 			for (int y = 0; y < Size.Y; y++)
 			{
-				int TX = TopLeft.X + (Size.X - x);
+				int TX = TopLeft.X + (Size.X - x); //<-Originally it mirrored tile placement, so this way I mirror it back
 				int TY = TopLeft.Y + y;
 				FVector Position = FVector(TileDistance * TX - 0.5f * TileDistance, TileDistance * TY + 0.5f * TileDistance, 0);
 				AActor* Object = nullptr;
@@ -122,6 +122,13 @@ void AInvicMapBuilder::BuildMapFromMapAsset()
 
 void AInvicMapBuilder::BuildMapFromString(FIntPoint Size, char* String)
 {
+	//This was my lazy approach to prebuild a map that were built inside Notepad with numbers
+	//0 is path
+	//1 is high, tower-placable tile
+	//2-4 path scenery
+	//5-7 high scenery, nontower-placable tiles
+
+
 	size_t Len = strlen(String);
 	FIntPoint TopLeft = FIntPoint(-Size.X / 2, -Size.Y / 2);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Length is %d"), Len));

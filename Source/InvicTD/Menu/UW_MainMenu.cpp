@@ -11,24 +11,24 @@
 FString UUW_MainMenu::CheckForNumericTextAndTrim(FString InputText, int MaxLength)
 {
 	
-	//int LastIndex = input.Len() - 1;
-	//auto LastChar = input[LastIndex];
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, InputText);
-
 	if (InputText.Len() <= 0)
 		return InputText;
 
+	//If the text isn't numeric, we remove the last char added
+	//It trims the text in both cases to not be larger than MaxLength
 
 	if (InputText.IsNumeric())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("It's Numeric")));
 		while(InputText.Len() > MaxLength)
 			InputText.RemoveAt(InputText.Len() - 1);
 	}
 	else
 	{
-		
-		InputText.RemoveAt(InputText.Len() - 1);
+		do //We have to remove last char because it is not numeric
+		{
+			InputText.RemoveAt(InputText.Len() - 1);
+		}
+		while  (InputText.Len() > MaxLength);
 	}
 	return InputText;
 }
@@ -38,7 +38,6 @@ FString UUW_MainMenu::TrimNameInputText(FString InputText, int MaxLength)
 	if (InputText.Len() <= 0)
 		return InputText;
 
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, InputText);
 
 	while(InputText.Len() > MaxLength)
 		InputText.RemoveAt(InputText.Len() - 1);
@@ -55,11 +54,11 @@ void UUW_MainMenu::TryStartGame()
 {
 	if (NumInputText.Len() > 0)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, NumInputText);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, NumInputText);
 		int map = FCString::Atoi(*NumInputText);
 		map--;
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Map is %d"), map));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Map is %d"), map));
 		if (map >= 0 && map <= 9)
 		{
 			AMainMenuGameMode* GameMode = Cast<AMainMenuGameMode>(GetWorld()->GetAuthGameMode());

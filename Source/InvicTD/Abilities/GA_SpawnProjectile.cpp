@@ -20,7 +20,7 @@ void UGA_SpawnProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 			FTransform SpawnTransform(FRotator(), Tower->GetCannonLocation(), FVector(1, 1, 1));
 
 			AInvicCannonBall* CannonBall = Cast<AInvicCannonBall>(UGameplayStatics::BeginDeferredActorSpawnFromClass(this, CannonBallActor, SpawnTransform));
-
+			//Spawning the cannonball with the target passed
 			if (CannonBall)
 			{
 				CannonBall->Target = Tower->Target;

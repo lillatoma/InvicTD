@@ -43,20 +43,24 @@ void AInvicEnemy::MoveToNextPathPoint(float DeltaTime)
 		FVector DiffNormal = Diff.GetSafeNormal();
 		FVector NextMovementPosition = CurrentPosition;
 
+		//If we can move more towards our path point
+		//Assuming that there is no case where a single Tick() call would result in moving over 2 path points
 		if (Diff.Length() <= TotalDistanceToCover)
 		{
 			LatestPathPoint++;
 			TotalDistanceToCover -= Diff.Length();
 			NextMovementPosition = NextPathPoint;
 
+			//If there is still another pathpoint to go to
 			if (LatestPathPoint < Path.Num() - 1)
 			{
 				if (TotalDistanceToCover > 0)
 				{
+					//Recalculating DiffNormal 
 					NextPathPoint = Path[LatestPathPoint + 1];
-
 					Diff = (NextPathPoint - NextMovementPosition);
 					DiffNormal = Diff.GetSafeNormal();
+
 					NextMovementPosition += DiffNormal * TotalDistanceToCover;
 				}
 			}
@@ -93,6 +97,9 @@ void AInvicEnemy::GetDamaged()
 
 void AInvicEnemy::GetKilled()
 {
+	//Playing death sound, and removing enemy from the enemy list
+	//Updating UI Text
+	//If there is no more enemy left, Initiate win call
 	if (DeathSound)
 		UGameplayStatics::SpawnSound2D(GetWorld(), DeathSound,0.25f);
 	Spawner->RemoveEnemyFromList(this);

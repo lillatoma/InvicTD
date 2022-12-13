@@ -64,6 +64,11 @@ void AInvicTower::FindEnemy()
 	if (!GetEnemyList())
 		return;
 
+	//Basically, if the enemy spawner exists, it has all the enemies that were spawned
+	//We loop through them to find the one closest to the tower
+	//If the closest enemy is within range, the target pointer should point to them
+	//Otherwise it should be null
+
 	auto AllEnemies = EnemyList->GetEnemyList();
 	int ENum = AllEnemies.Num();
 
@@ -94,6 +99,7 @@ void AInvicTower::TryAttackEnemy()
 
 	if (Target)
 	{
+		//Attack Ability must have a cooldown effect set!!
 		GetAbilitySystemComponent()->TryActivateAbilityByClass(AttackAbility);
 	}
 }
@@ -102,6 +108,8 @@ void AInvicTower::RotateCannonTowardsEnemy(float DeltaTime)
 {
 	if (Target)
 	{
+		//TODO: Find a better way
+
 		FVector Dist = Target->GetActorLocation() - GetActorLocation();
 		FRotator DesiredRotation = Dist.Rotation();
 		DesiredRotation.Yaw -= 90.f;

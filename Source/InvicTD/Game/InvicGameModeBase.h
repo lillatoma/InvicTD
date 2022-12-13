@@ -32,6 +32,9 @@ class INVICTD_API AInvicGameModeBase : public AGameModeBase
 	UPROPERTY(VisibleAnywhere)
 		class AInvicEnemySpawner* EnemySpawnerOnMap;
 
+	UPROPERTY(VisibleAnywhere)
+		class AInvicMapBuilder* MapBuilderOnMap;
+
 	bool bCurrentMatchEnded = false;
 	bool bCurrentMatchWon = false;
 
@@ -41,14 +44,15 @@ protected:
 	virtual void SpawnEndWidget();
 	virtual void SpawnTextWidget();
 
+	virtual void SpawnMapGenerator();
+	virtual void SpawnEnemySpawner();
+	virtual void SpawnPlayer();
+
 	UPROPERTY(EditAnywhere)
 		class UStatsDataAsset* StatsAsset;
 
 	UPROPERTY(EditAnywhere, Category = "Map Builder")
 		TSubclassOf<class AInvicMapBuilder> MapGenerator;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map Builder")
-		TSoftObjectPtr<class AInvicMapBuilder> MapGenSoft;
 
 	UPROPERTY(EditAnywhere, Category = "Enemy Spawner")
 		TSubclassOf<class AInvicEnemySpawner> EnemySpawner;
@@ -66,17 +70,17 @@ protected:
 
 public:
 
-	void OnEnemyKilled();
+	virtual void OnEnemyKilled();
 
-	void UpdateWidgetText();
+	virtual void UpdateWidgetText();
 
-	void PreloseGame();
+	virtual void PreloseGame();
 
-	void LoseGame();
+	virtual void LoseGame();
 
-	void PrewinGame();
+	virtual void PrewinGame();
 
-	void WinGame();
+	virtual void WinGame();
 
-	void ActOnGameEnd();
+	virtual void ActOnGameEnd();
 };
